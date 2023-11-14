@@ -5,7 +5,9 @@ A simple selenium test example written by python
 import unittest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+import time
 
 class TestTemplate(unittest.TestCase):
     """Include test cases on a given url"""
@@ -46,3 +48,30 @@ class TestTemplate(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTemplate)
     unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("--window-size=1920,1080")
+    driver = webdriver.Chrome(options=chrome_options)
+
+
+    try:
+        # Open Google
+        driver.get("https://www.google.com")
+        #identify search box
+        m = driver.find_element("name", "q")
+        #enter search text
+        m.send_keys("Tutorialspoint")
+        time.sleep(0.2)
+        #perform Google search with Keys.ENTER
+        m.send_keys(Keys.ENTER)
+
+        print(driver.current_url)
+
+    finally:
+        # Close the browser window
+        driver.quit()
